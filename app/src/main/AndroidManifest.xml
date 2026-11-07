@@ -1,5 +1,4 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.masters.freyafresh">
     <uses-feature android:name="android.hardware.usb.host" />
     <application android:label="FREYA-FLASH" android:icon="@mipmap/icon" android:roundIcon="@mipmap/icon" android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar">
         <activity android:name=".MainActivity" android:exported="true">
