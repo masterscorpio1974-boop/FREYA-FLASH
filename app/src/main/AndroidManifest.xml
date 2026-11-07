@@ -1,7 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.masters.freyaflash">
+
     <uses-feature android:name="android.hardware.usb.host" />
-    <application android:label="FREYA-FLASH" android:icon="@mipmap/icon" android:roundIcon="@mipmap/icon" android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar">
-        <activity android:name=".MainActivity" android:exported="true">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/icon"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/icon"
+        android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar">
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
