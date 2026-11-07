@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-feature android:name="android.hardware.usb.host" />
-    <application android:label="FREYA-FLASH" android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar">
+    <application android:label="FREYA-FLASH" android:icon="@mipmap/icon" android:roundIcon="@mipmap/icon" android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar">
         <activity android:name=".MainActivity" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
