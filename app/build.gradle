@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace 'com.masters.freyafresh'
+    namespace 'com.masters.freyaflash'
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.masters.freyafresh"
+        applicationId "com.masters.freyaflash"
         minSdk 24
         targetSdk 34
         versionCode 1
