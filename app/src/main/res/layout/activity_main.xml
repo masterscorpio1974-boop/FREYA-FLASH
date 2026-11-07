@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:orientation="vertical" android:padding="16dp">
+    <TextView android:id="@+id/txtEstado" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="ESTADO" android:textSize="20sp" />
+    <TextView android:id="@+id/txtArchivo" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Archivo: -" />
+    <TextView android:id="@+id/txtModelo" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Modelo: -" />
+    <Button android:id="@+id/btnIniciar" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="FLASHEAR K410" />
+    <ScrollView android:layout_width="match_parent" android:layout_height="match_parent">
+        <TextView android:id="@+id/txtConsola" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Consola:" />
+    </ScrollView>
+</LinearLayout>
