@@ -56,7 +56,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         initViews()
         setupButtons()
-        appendLog("FREYA-FLASH v1.0 iniciada...")
+        appendLog("FREYA-FLASH v1.2 iniciada...")
         appendLog("Esperando archivo .kdz...")
     }
 
