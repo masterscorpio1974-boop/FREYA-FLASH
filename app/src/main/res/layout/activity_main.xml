@@ -4,35 +4,30 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="#0A0F14"
-    android:padding="1dp">
+    android:padding="8dp">
 
-    <!-- Barra Superior -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="12dp"
         android:background="#101A24"
+        android:padding="10dp"
         android:gravity="center_vertical">
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="⚡ FREYA-FLASH"
             android:textColor="#00E5FF"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            android:layout_marginStart="8dp"/>
-
+            android:textSize="20sp"
+            android:textStyle="bold"/>
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="by MASTER S  —  Ver 1.0"
+            android:text="  by MASTER S — Ver 1.0"
             android:textColor="#80DEEA"
             android:textSize="12sp"
-            android:layout_marginStart="12dp"/>
-
+            android:layout_marginStart="8dp"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -41,242 +36,79 @@
             android:textSize="11sp"/>
     </LinearLayout>
 
-    <!-- Contenido Principal -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_marginTop="8dp">
 
-        <!-- Menú Lateral -->
         <LinearLayout
-            android:layout_width="200dp"
+            android:layout_width="190dp"
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:background="#0F1820"
             android:padding="8dp">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="⚡ MODO FLASH"
-                android:textColor="#00E5FF"
-                android:textSize="14sp"
-                android:padding="10dp"
-                android:background="#152A38"
-                android:textStyle="bold"/>
-
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="⚡ MODO FLASH — ACTIVO" android:textColor="#00E5FF" android:textSize="13sp" android:padding="10dp" android:background="#152A38" android:textStyle="bold"/>
             <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="▸ Panel General" android:textColor="#B2EBF2" android:padding="8dp" android:textSize="12sp"/>
             <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="▸ Rendimiento" android:textColor="#B2EBF2" android:padding="8dp" android:textSize="12sp"/>
             <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="▸ Módulos" android:textColor="#B2EBF2" android:padding="8dp" android:textSize="12sp"/>
             <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="▸ Registro de Logs" android:textColor="#B2EBF2" android:padding="8dp" android:textSize="12sp"/>
             <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="▸ Configuración Avanzada" android:textColor="#B2EBF2" android:padding="8dp" android:textSize="12sp"/>
             <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="▸ Ayuda / Soporte" android:textColor="#B2EBF2" android:padding="8dp" android:textSize="12sp"/>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#1E2D3A"
-                android:layout_marginVertical="10dp"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="🔋 ALIMENTACIÓN"
-                android:textColor="#00FF91"
-                android:textSize="13sp"
-                android:textStyle="bold"
-                android:padding="4dp"/>
-
-            <ProgressBar
-                android:id="@+id/batteryBar"
-                style="?android:attr/progressBarStyleHorizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:progress="92"
-                android:progressTint="#00FF91"
-                android:background="#1A2A35"
-                android:layout_marginTop="6dp"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Energía: 92% — Estable"
-                android:textColor="#80CBC4"
-                android:textSize="10sp"
-                android:layout_marginTop="4dp"/>
-
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"/>
-
+            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#1E2D3A" android:layout_marginVertical="10dp"/>
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="🔋 ALIMENTACIÓN" android:textColor="#00FF91" android:textSize="13sp" android:textStyle="bold"/>
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Energía: 92% — Estable" android:textColor="#80CBC4" android:textSize="11sp" android:layout_marginTop="6dp"/>
+            <ProgressBar android:id="@+id/batteryBar" style="?android:attr/progressBarStyleHorizontal" android:layout_width="match_parent" android:layout_height="wrap_content" android:progress="92" android:progressTint="#00FF91" android:layout_marginTop="6dp"/>
+            <Space android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1"/>
         </LinearLayout>
 
-        <!-- Panel Central -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical"
-            android:padding="12dp">
+            android:padding="10dp">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="PANEL DE OPERACIÓN"
-                android:textColor="#FFFFFF"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="12dp"/>
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Panel de Operación — Freya-Flash" android:textColor="#FFFFFF" android:textSize="17sp" android:textStyle="bold" android:layout_marginBottom="10dp"/>
 
-            <!-- Tarjetas de Estado -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="#101A24"
-                    android:padding="10dp"
-                    android:layout_marginEnd="6dp">
-                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="⚡ VELOCIDAD" android:textColor="#80DEEA" android:textSize="10sp"/>
-                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="1.24 GHz" android:textColor="#00E5FF" android:textSize="16sp" android:textStyle="bold"/>
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:background="#101A24" android:padding="10dp" android:layout_marginEnd="6dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="⚡ VELOCIDAD" android:textColor="#80DEEA" android:textSize="10sp"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="1.24 GHz" android:textColor="#00E5FF" android:textSize="16sp" android:textStyle="bold"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="↑ +12% Boost Activo" android:textColor="#80CBC4" android:textSize="9sp"/>
                 </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="#101A24"
-                    android:padding="10dp"
-                    android:layout_marginEnd="6dp">
-                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="📊 MEMORIA" android:textColor="#CE93D8" android:textSize="10sp"/>
-                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="78%" android:textColor="#E1BEE7" android:textSize="16sp" android:textStyle="bold"/>
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:background="#101A24" android:padding="10dp" android:layout_marginEnd="6dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="📊 MEMORIA" android:textColor="#CE93D8" android:textSize="10sp"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="78%" android:textColor="#E1BEE7" android:textSize="16sp" android:textStyle="bold"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="12.4 GB / 16 GB" android:textColor="#80CBC4" android:textSize="9sp"/>
                 </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="#101A24"
-                    android:padding="10dp">
-                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="🛡️ SEGURIDAD" android:textColor="#A5D6A7" android:textSize="10sp"/>
-                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="SEGURA" android:textColor="#00FF91" android:textSize="16sp" android:textStyle="bold"/>
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:background="#101A24" android:padding="10dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🛡️ SEGURIDAD" android:textColor="#A5D6A7" android:textSize="10sp"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="SEGURA" android:textColor="#00FF91" android:textSize="16sp" android:textStyle="bold"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Sin amenazas" android:textColor="#80CBC4" android:textSize="9sp"/>
                 </LinearLayout>
             </LinearLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#1E2D3A"
-                android:layout_marginVertical="12dp"/>
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="ANÁLISIS DE RENDIMIENTO EN TIEMPO REAL" android:textColor="#00E5FF" android:textSize="11sp" android:textStyle="bold" android:layout_marginTop="12dp"/>
+            <TextView android:layout_width="match_parent" android:layout_height="50dp" android:background="#101A24" android:text="╱╲  ╱╲╱  ╲╱╲  ╱╲  — Gráfica en vivo —" android:textColor="#00E5FF" android:gravity="center" android:textSize="12sp" android:layout_marginTop="4dp"/>
 
-            <!-- Selección de Archivo -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="📂 ARCHIVO DE FIRMWARE (.kdz)"
-                android:textColor="#80DEEA"
-                android:textSize="12sp"
-                android:textStyle="bold"/>
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="📂 ARCHIVO DE FIRMWARE (.kdz)" android:textColor="#80DEEA" android:textSize="12sp" android:textStyle="bold" android:layout_marginTop="12dp"/>
+            <Button android:id="@+id/btnSelectFile" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="📄 SELECCIONAR ARCHIVO .KDZ" android:backgroundTint="#152A38" android:textColor="#00E5FF" android:layout_marginTop="6dp"/>
+            <TextView android:id="@+id/tvFileName" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Archivo: —" android:textColor="#B2EBF2" android:textSize="11sp" android:layout_marginTop="4dp"/>
+            <TextView android:id="@+id/tvModelInfo" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Modelo: —" android:textColor="#B2EBF2" android:textSize="11sp"/>
 
-            <Button
-                android:id="@+id/btnSelectFile"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="📄 SELECCIONAR ARCHIVO .KDZ"
-                android:background="#152A38"
-                android:textColor="#00E5FF"
-                android:layout_marginVertical="8dp"
-                android:paddingVertical="12dp"/>
-
-            <TextView
-                android:id="@+id/tvFileName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Archivo: —"
-                android:textColor="#B2EBF2"
-                android:textSize="11sp"/>
-
-            <TextView
-                android:id="@+id/tvModelInfo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Modelo: —"
-                android:textColor="#B2EBF2"
-                android:textSize="11sp"
-                android:layout_marginBottom="12dp"/>
-
-            <!-- Botones de Acción -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="8dp">
-
-                <Button
-                    android:id="@+id/btnFlash"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="⚡ INICIAR FLASH"
-                    android:background="#00BFA5"
-                    android:textColor="#FFFFFF"
-                    android:layout_marginEnd="6dp"
-                    android:paddingVertical="14dp"
-                    android:textStyle="bold"/>
-
-                <Button
-                    android:id="@+id/btnStop"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="⏹ DETENER"
-                    android:background="#3A1F28"
-                    android:textColor="#FF8A80"
-                    android:layout_marginEnd="6dp"
-                    android:paddingVertical="14dp"/>
-
-                <Button
-                    android:id="@+id/btnExportLogs"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="📋 EXPORTAR LOGS"
-                    android:background="#152A38"
-                    android:textColor="#80DEEA"
-                    android:paddingVertical="14dp"/>
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="8dp">
+                <Button android:id="@+id/btnFlash" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="⚡ INICIAR FLASH" android:backgroundTint="#00E5FF" android:textColor="#000000" android:textStyle="bold" android:layout_marginEnd="6dp"/>
+                <Button android:id="@+id/btnStop" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="⏹ DETENER" android:backgroundTint="#1E2D3A" android:textColor="#FF8A80" android:layout_marginEnd="6dp"/>
+                <Button android:id="@+id/btnExportLogs" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="📋 EXPORTAR LOGS" android:backgroundTint="#152A38" android:textColor="#80DEEA"/>
             </LinearLayout>
 
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"/>
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="✓ MÓDULOS ACTIVOS: FLASH CORE — Operativo  •  NEURAL SYNC — Sincronizado  •  CACHE BOOST — Optimizado" android:textColor="#A5D6A7" android:textSize="9sp" android:layout_marginTop="10dp"/>
 
-            <!-- Consola de Logs -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="> CONSOLA DE SISTEMA"
-                android:textColor="#80DEEA"
-                android:textSize="11sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="4dp"/>
-
-            <TextView
-                android:id="@+id/consoleOutput"
-                android:layout_width="match_parent"
-                android:layout_height="120dp"
-                android:background="#0A0F14"
-                android:padding="10dp"
-                android:text="[00:00:00] FREYA-FLASH v1.0 iniciada...\n[00:00:00] Esperando archivo..."
-                android:textColor="#00FF91"
-                android:textSize="10sp"
-                android:fontFamily="monospace"/>
+            <Space android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1"/>
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="> CONSOLA DE SISTEMA" android:textColor="#80DEEA" android:textSize="11sp" android:textStyle="bold"/>
+            <TextView android:id="@+id/consoleOutput" android:layout_width="match_parent" android:layout_height="110dp" android:background="#0A0F14" android:padding="10dp" android:textColor="#00FF91" android:textSize="10sp" android:fontFamily="monospace"/>
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>
