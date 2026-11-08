@@ -1,51 +1,167 @@
 package com.masters.freyaflash
-import android.app.Activity
+
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
-import android.widget.*
-import java.io.File
-class MainActivity : Activity() {
-    lateinit var txtEstado: TextView
-    lateinit var txtArchivo: TextView
-    lateinit var txtModelo: TextView
-    lateinit var btnIniciar: Button
-    lateinit var txtConsola: TextView
-    var kdzEncontrado: File? = null
+import android.widget.Button
+import android.widget.TextView
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import java.text.SimpleDateFormat
+import java.util.*
+
+class MainActivity : AppCompatActivity() {
+
+    private lateinit var consoleOutput: TextView
+    private lateinit var btnSelectFile: Button
+    private lateinit var btnFlash: Button
+    private lateinit var btnStop: Button
+    private lateinit var btnExportLogs: Button
+    private lateinit var tvFileName: TextView
+    private lateinit var tvModelInfo: TextView
+
+    private var selectedFileUri: Uri? = null
+    private var detectedModelFromFile: String? = null
+    private val logs = mutableListOf<String>()
+
+    private val pickFileLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == RESULT_OK) {
+            result.data?.data?.also { uri ->
+                selectedFileUri = uri
+                handleFileSelected(uri)
+            }
+        }
+    }
+
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        if (isGranted) {
+            appendLog("Permiso concedido - puedes seleccionar archivos")
+            openFilePicker()
+        } else {
+            appendLog("Permiso denegado - no se puede acceder a archivos")
+            Toast.makeText(this, "Se necesita permiso de almacenamiento", Toast.LENGTH_SHORT).show()
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        txtEstado = findViewById(R.id.txtEstado)
-        txtArchivo = findViewById(R.id.txtArchivo)
-        txtModelo = findViewById(R.id.txtModelo)
-        btnIniciar = findViewById(R.id.btnIniciar)
-        txtConsola = findViewById(R.id.txtConsola)
-        btnIniciar.isEnabled = false
-        log("FREYA-FLASH V1.0 iniciada...")
-        buscarKDZ()
-        btnIniciar.setOnClickListener { kdzEncontrado?.let { flashear(it) } }
+        initViews()
+        setupButtons()
+        appendLog("FREYA-FLASH v1.0 iniciada...")
+        appendLog("Esperando archivo .kdz...")
     }
-    fun buscarKDZ() {
-        val carpeta = File("/storage/emulated/0/Download/FREYA-FLASH")
-        if (!carpeta.exists()) { carpeta.mkdirs(); log("Carpeta creada. Mete tu .kdz ahi, we."); return }
-        val archivos = carpeta.listFiles { f -> f.name.lowercase().contains(".kdz") }
-        if (archivos.isNullOrEmpty()) { txtEstado.text = "SIN ARCHIVO"; log("No hay .kdz."); return }
-        val kdz = archivos[0]
-        kdzEncontrado = kdz
-        txtArchivo.text = kdz.name
-        if (KDZParser.esK410(kdz)) {
-            txtModelo.text = "Modelo: LG K410 - VALIDO"
-            txtEstado.text = "LISTO PARA FLASHEAR"
-            btnIniciar.isEnabled = true
-            log("Archivo VALIDO: ${kdz.name}")
+
+    private fun initViews() {
+        consoleOutput = findViewById(R.id.consoleOutput)
+        btnSelectFile = findViewById(R.id.btnSelectFile)
+        btnFlash = findViewById(R.id.btnFlash)
+        btnStop = findViewById(R.id.btnStop)
+        btnExportLogs = findViewById(R.id.btnExportLogs)
+        tvFileName = findViewById(R.id.tvFileName)
+        tvModelInfo = findViewById(R.id.tvModelInfo)
+        setButtonsEnabled(false)
+    }
+
+    private fun setupButtons() {
+        btnSelectFile.setOnClickListener { checkPermissionAndOpenFile() }
+        btnFlash.setOnClickListener {
+            if (selectedFileUri != null) {
+                appendLog("FLASH - En desarrollo / simulacion")
+                appendLog("Archivo: ${selectedFileUri?.lastPathSegment}")
+                appendLog("Modelo: $detectedModelFromFile")
+                Toast.makeText(this, "Flasheo iniciado (simulacion)", Toast.LENGTH_SHORT).show()
+            }
+        }
+        btnStop.setOnClickListener {
+            appendLog("Proceso detenido por el usuario")
+        }
+        btnExportLogs.setOnClickListener { exportLogs() }
+    }
+
+    private fun checkPermissionAndOpenFile() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            openFilePicker()
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                openFilePicker()
+            } else {
+                requestPermissionLauncher.launch(android.Manifest.permission.READ_EXTERNAL_STORAGE)
+            }
         } else {
-            txtModelo.text = "Modelo: NO ES K410 - RECHAZADO"
-            txtEstado.text = "ARCHIVO NO VALIDO"
-            btnIniciar.isEnabled = false
-            log("ERROR: Este .kdz NO es para K410.")
+            openFilePicker()
         }
     }
-    fun flashear(kdz: File) {
-        log("Iniciando flash como LGUP...")
-        LAFProtocol.flashear(this, kdz) { mensaje -> runOnUiThread { log(mensaje) } }
+
+    private fun openFilePicker() {
+        val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
+            type = "*/*"
+            addCategory(Intent.CATEGORY_OPENABLE)
+        }
+        pickFileLauncher.launch(Intent.createChooser(intent, "Seleccionar archivo .kdz"))
     }
-    fun log(msg: String) { txtConsola.append("\n> $msg") }
+
+    private fun handleFileSelected(uri: Uri) {
+        val fileName = uri.lastPathSegment ?: "Archivo desconocido"
+        tvFileName.text = "Archivo: $fileName"
+        appendLog("Archivo seleccionado: $fileName")
+        if (!fileName.endsWith(".kdz", ignoreCase = true)) {
+            appendLog("El archivo no tiene extension .kdz")
+            tvModelInfo.text = "Modelo: - Archivo no valido"
+            setButtonsEnabled(false)
+            return
+        }
+        detectedModelFromFile = parseModelFromFileName(fileName)
+        tvModelInfo.text = "Modelo detectado: $detectedModelFromFile"
+        appendLog("Modelo desde archivo: $detectedModelFromFile")
+        appendLog("LISTO PARA FLASHEAR")
+        setButtonsEnabled(true)
+    }
+
+    private fun parseModelFromFileName(name: String): String {
+        return when {
+            name.contains("K410", ignoreCase = true) -> "LG K410 / K41S"
+            name.contains("K420", ignoreCase = true) -> "LG K42"
+            name.contains("K50", ignoreCase = true) -> "LG K50/K51"
+            name.contains("V50", ignoreCase = true) -> "LG V50"
+            name.contains("V60", ignoreCase = true) -> "LG V60"
+            else -> "Modelo LG (sin identificar)"
+        }
+    }
+
+    private fun setButtonsEnabled(enabled: Boolean) {
+        btnFlash.isEnabled = enabled
+        btnFlash.alpha = if (enabled) 1.0f else 0.4f
+    }
+
+    private fun appendLog(message: String) {
+        val time = SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(Date())
+        val line = "[$time] $message"
+        logs.add(line)
+        val currentText = consoleOutput.text
+        consoleOutput.text = if (currentText.isEmpty()) line else "$currentText\n$line"
+    }
+
+    private fun exportLogs() {
+        if (logs.isEmpty()) {
+            appendLog("No hay registros para exportar")
+            return
+        }
+        val logText = logs.joinToString("\n")
+        val sendIntent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, logText)
+            type = "text/plain"
+        }
+        startActivity(Intent.createChooser(sendIntent, "Exportar logs a..."))
+        appendLog("Logs enviados para exportacion")
+    }
 }
