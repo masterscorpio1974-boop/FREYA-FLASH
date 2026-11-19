@@ -1,7 +1,11 @@
 package com.masters.freyaflash
 
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
+import android.hardware.usb.UsbManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -11,6 +15,8 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.masters.freyaflash.laf.LafProtocol
+import com.masters.freyaflash.laf.LafUsbTransport
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -21,12 +27,34 @@ class MainActivity : AppCompatActivity() {
     private lateinit var btnFlash: Button
     private lateinit var btnStop: Button
     private lateinit var btnExportLogs: Button
+    private lateinit var btnTestHelo: Button
     private lateinit var tvFileName: TextView
     private lateinit var tvModelInfo: TextView
 
     private var selectedFileUri: Uri? = null
     private var detectedModelFromFile: String? = null
     private val logs = mutableListOf<String>()
+
+    // Prueba HELO por USB: el permiso llega por broadcast y la prueba
+    // corre en hilo de fondo (bulkTransfer bloquea hasta 5 s).
+    private var heloTestPending = false
+    private val usbPermissionReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            if (intent.action == LafUsbTransport.ACTION_USB_PERMISSION) {
+                val granted = intent.getBooleanExtra(
+                    UsbManager.EXTRA_PERMISSION_GRANTED, false
+                )
+                if (granted && heloTestPending) {
+                    heloTestPending = false
+                    appendLog("Permiso USB concedido")
+                    runHeloTest()
+                } else if (!granted) {
+                    heloTestPending = false
+                    appendLog("Permiso USB denegado")
+                }
+            }
+        }
+    }
 
     private val pickFileLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -56,8 +84,23 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         initViews()
         setupButtons()
+        val filter = IntentFilter(LafUsbTransport.ACTION_USB_PERMISSION)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(usbPermissionReceiver, filter, Context.RECEIVER_NOT_EXPORTED)
+        } else {
+            registerReceiver(usbPermissionReceiver, filter)
+        }
         appendLog("FREYA-FLASH v1.2 iniciada...")
         appendLog("Esperando archivo .kdz...")
+    }
+
+    override fun onDestroy() {
+        try {
+            unregisterReceiver(usbPermissionReceiver)
+        } catch (_: IllegalArgumentException) {
+            // No estaba registrado.
+        }
+        super.onDestroy()
     }
 
     private fun initViews() {
@@ -66,6 +109,7 @@ class MainActivity : AppCompatActivity() {
         btnFlash = findViewById(R.id.btnFlash)
         btnStop = findViewById(R.id.btnStop)
         btnExportLogs = findViewById(R.id.btnExportLogs)
+        btnTestHelo = findViewById(R.id.btnTestHelo)
         tvFileName = findViewById(R.id.tvFileName)
         tvModelInfo = findViewById(R.id.tvModelInfo)
         setButtonsEnabled(false)
@@ -85,6 +129,84 @@ class MainActivity : AppCompatActivity() {
             appendLog("Proceso detenido por el usuario")
         }
         btnExportLogs.setOnClickListener { exportLogs() }
+        btnTestHelo.setOnClickListener { startHeloTest() }
+    }
+
+    /**
+     * Prueba HELO por USB contra el LM-K410 en Download.
+     * Primero corre la autoprueba del protocolo (sin USB) y luego busca
+     * el telefono 1004:6000. Si no hay permiso USB, lo pide y la prueba
+     * corre cuando llega el broadcast.
+     */
+    private fun startHeloTest() {
+        val selfTest = LafProtocol.selfTest()
+        val passed = selfTest.count { it.second }
+        appendLog("Autoprueba protocolo: $passed/${selfTest.size} PASS")
+        selfTest.filter { !it.second }.forEach { appendLog("  FALLO: ${it.first}") }
+        if (passed != selfTest.size) {
+            appendLog("Autoprueba fallo, no se toca el USB")
+            return
+        }
+        val transport = LafUsbTransport(this)
+        val device = transport.findLafDevice()
+        if (device == null) {
+            appendLog("No se encontro el LG en Download (1004:6000)")
+            appendLog("Mete el K41S en Download: apagado + Vol+ + cable")
+            return
+        }
+        appendLog("LG encontrado: ${device.productName ?: "LM-K410"} 1004:6000")
+        if (!transport.hasPermission(device)) {
+            appendLog("Pidiendo permiso USB...")
+            heloTestPending = true
+            transport.requestPermission(device)
+            return
+        }
+        runHeloTest()
+    }
+
+    /** Corre el HELO en hilo de fondo y loguea el resultado en consola. */
+    private fun runHeloTest() {
+        btnTestHelo.isEnabled = false
+        appendLog("Abriendo conexion LAF (IF2 255/255/255)...")
+        Thread {
+            val transport = LafUsbTransport(this@MainActivity)
+            val device = transport.findLafDevice()
+            if (device == null) {
+                logOnUi("LG ya no esta conectado")
+                enableHeloButtonOnUi()
+                return@Thread
+            }
+            val conn = transport.open(device)
+            if (conn == null) {
+                logOnUi("No se pudo abrir el dispositivo USB")
+                enableHeloButtonOnUi()
+                return@Thread
+            }
+            conn.use {
+                when (val result = it.exchangeHelo { msg -> logOnUi(msg) }) {
+                    is LafUsbTransport.HeloResult.Ok -> {
+                        logOnUi("*** HELO OK en IF2 ***")
+                        logOnUi(
+                            "arg1=${result.arg1} arg2=${result.arg2} " +
+                                "CRC=0x${result.crc.toString(16)}"
+                        )
+                        logOnUi("El LM-K410 responde LAF por OUT 0x02 / IN 0x83")
+                    }
+                    is LafUsbTransport.HeloResult.Fail -> {
+                        logOnUi("HELO FALLO: ${result.reason}")
+                    }
+                }
+            }
+            enableHeloButtonOnUi()
+        }.start()
+    }
+
+    private fun logOnUi(message: String) {
+        runOnUiThread { appendLog(message) }
+    }
+
+    private fun enableHeloButtonOnUi() {
+        runOnUiThread { btnTestHelo.isEnabled = true }
     }
 
     private fun checkPermissionAndOpenFile() {
