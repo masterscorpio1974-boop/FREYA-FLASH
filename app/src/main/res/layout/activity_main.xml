@@ -76,6 +76,7 @@
                     <Button android:id="@+id/btnFlash" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="⚡ INICIAR FLASH" android:backgroundTint="#00E5FF" android:textColor="#000000" android:textSize="11sp" android:maxLines="1" android:textStyle="bold" android:layout_marginTop="6dp"/>
                     <Button android:id="@+id/btnStop" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="DETENER PROCESO" android:backgroundTint="#1E2D3A" android:textColor="#FF8A80" android:textSize="11sp" android:maxLines="1" android:layout_marginTop="4dp"/>
                     <Button android:id="@+id/btnExportLogs" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="EXPORTAR LOGS" android:backgroundTint="#152A38" android:textColor="#80DEEA" android:textSize="11sp" android:maxLines="1" android:layout_marginTop="4dp"/>
+                    <Button android:id="@+id/btnTestHelo" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="🔌 PROBAR HELO (USB)" android:backgroundTint="#152A38" android:textColor="#00FF91" android:textSize="11sp" android:maxLines="1" android:layout_marginTop="4dp"/>
                 </LinearLayout>
             </LinearLayout>
 
